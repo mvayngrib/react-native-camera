@@ -466,6 +466,13 @@ static NSDictionary *defaultFaceDetectorOptions = nil;
 
             if (useFastMode) {
                 [self onPictureSaved:@{@"data": response, @"id": options[@"id"]}];
+            } else if (options[@"addToImageStore"]) {
+                [self->_bridge.imageStoreManager
+                 storeImageData:takenImageData
+                 withBlock:^(NSString *imageTag) {
+                     response[@"imageTag"] = imageTag;
+                     resolve(response);
+                 }];
             } else {
                 resolve(response);
             }
